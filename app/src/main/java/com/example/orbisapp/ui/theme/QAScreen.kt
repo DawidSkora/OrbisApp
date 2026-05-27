@@ -1,4 +1,4 @@
-package com.example.orbisapp.ui
+package com.example.orbisapp.ui.theme
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,10 +14,16 @@ import com.example.orbisapp.model.QAPair
 fun QAScreen(viewModel: QAViewModel = viewModel()) {
     val pairs by viewModel.pairs.collectAsState()
     val error by viewModel.error.collectAsState()
+    val loading by viewModel.loading.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text("Orbis Q&A", style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(16.dp))
+
+        if (loading) {
+            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            Spacer(modifier = Modifier.height(8.dp))
+        }
 
         error?.let {
             Text("Błąd: $it", color = MaterialTheme.colorScheme.error)
