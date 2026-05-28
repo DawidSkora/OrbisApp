@@ -53,4 +53,33 @@ class QAViewModel : ViewModel() {
             }
         }
     }
+
+    fun updatePair(id: String, question: String, answer: String) {
+        viewModelScope.launch {
+            _loading.value = true
+            try {
+                val updatedPair = QAPair(id = id, question = question, answer = answer)
+                RetrofitClient.api.update(id, updatedPair)
+                loadAll()
+            } catch (e: Exception) {
+                _error.value = e.message
+            } finally {
+                _loading.value = false
+            }
+        }
+    }
+
+    fun deletePair(id: String) {
+        viewModelScope.launch {
+            _loading.value = true
+            try {
+                RetrofitClient.api.delete(id)
+                loadAll()
+            } catch (e: Exception) {
+                _error.value = e.message
+            } finally {
+                _loading.value = false
+            }
+        }
+    }
 }
